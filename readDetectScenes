@@ -23,7 +23,7 @@ import numpy as np
 # arguments: path to the traffic sign data, for example './GTSRB/Training'
 # returns: list of images, list of corresponding labels 
 
-def readTrafficSigns(rootpath):
+def readDetectSigns(rootpath):
 ''Reads traffic sign data for German Traffic Sign Recognition Benchmark.
     Arguments: path to the traffic sign data, for example './GTSRB/Training'
     Returns:   list of images, list of corresponding labels'''
