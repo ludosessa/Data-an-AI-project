@@ -1,4 +1,4 @@
-'# The German Traffic Sign Detection Benchmark
+# The German Traffic Sign Detection Benchmark
 #
 # modification of the readTrafficSigns.py for the classification task (GTSRB)
 #
@@ -24,7 +24,7 @@ import numpy as np
 # returns: list of images, list of corresponding labels 
 
 def readDetectSigns(rootpath):
-''Reads traffic sign data for German Traffic Sign Recognition Benchmark.
+'''Reads traffic sign data for German Traffic Sign Recognition Benchmark.
     Arguments: path to the traffic sign data, for example './GTSRB/Training'
     Returns:   list of images, list of corresponding labels'''
     images = [] # images
