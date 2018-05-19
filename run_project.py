@@ -1,5 +1,5 @@
 # import the necessary packages
-import readTrafficSigns as rTS
+import readTrafficSigns
 import argparse
 import numpy as np
 import pickle
@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from torch import nn
 from torch import optim
 from conv_layers import ConvNet
-from Codeproject import resize
+import scipy.misc 
 
 #########################################################################
 # TODO:                                                                 #
@@ -35,9 +35,9 @@ def predict(X):
     
     CNN_project = ConvNet(n_input_channels=3, n_output=43)
     CNN_project.load_state_dict(torch.load('./project.pt'))
-    output = CNN_project.predict(images).cuda()
+    output = CNN_project.predict(images.cuda())
     _, prediction = torch.max(output.data, 1)
-    pred_y = prediction.numpy().squeeze()
+    pred_y = prediction.data.cpu().numpy().squeeze()
    
     #########################################################################
     #                       END OF YOUR CODE                                #
@@ -46,19 +46,26 @@ def predict(X):
    
 
 def main():
-    n = 47
     trafficSigns_test = './data/test/Final_Test/Images'
-    X_test, y_test = readTrafficSigns(trafficSigns_test)
-    X_test = resize(X_test, n,n)
-    y_test = np.asarray(y_train, dtype=np.int64)
+    X, y = readTrafficSigns(trafficSigns_test)
+    #X_resized = []
+    #for i in range(len(X)):
+        #image_resized = scipy.misc.imresize(X[i], (47, 47))
+        #X_resized.append(image_resized)
+    #X_test = X_resized
+    X_test = np.asarray(X)
+    #X_test = np.transpose(X_test,[0,3,1,2])
+    y_test = np.asarray(y, dtype=np.int64)
     X_test, y_test = torch.from_numpy(X_test).type(torch.cuda.FloatTensor), torch.from_numpy(y_test).type(torch.cuda.LongTensor)
     prediction_project = predict(X_test)
     acc_project = sum(prediction_project == y_test)/len(X_test)
     print("Accuracy %s"%(acc_project))
     
-if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-t", "--test", required=True, help="path to test file")
-    ap.add_argument("-g", "--group", required=True, help="group number")
-    args = vars(ap.parse_args())
-    main(args["test"],args["group"])
+#if __name__ == "__main__":
+    #ap = argparse.ArgumentParser()
+    #ap.add_argument('--no-cuda', action='store_true', default=False, help='enables CUDA training')
+    #ap.add_argument("-t", "--test", required=True, help="path to test file")
+    #ap.add_argument("-g", "--group", required=True, help="group number")
+    #args = vars(ap.parse_args())
+    #args.cuda = not args.no_cuda and torch.cuda.is_available()
+    #main(args["test"],args["group"])
