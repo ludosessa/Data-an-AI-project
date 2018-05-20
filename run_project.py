@@ -31,11 +31,11 @@ def predict(X):
     # value                                                                 #
     #########################################################################
     
-    images = Variable(torch.from_numpy(X).type(torch.cuda.FloatTensor))
+    images = Variable(torch.from_numpy(X).type(torch.FloatTensor))
     
     CNN_project = ConvNet(n_input_channels=3, n_output=43)
     CNN_project.load_state_dict(torch.load('./project.pt'))
-    output = CNN_project.predict(images.cuda())
+    output = CNN_project.predict(images)
     _, prediction = torch.max(output.data, 1)
     pred_y = prediction.data.cpu().numpy().squeeze()
    
@@ -61,7 +61,8 @@ def main():
     acc_project = sum(prediction_project == y_test)/len(X_test)
     print("Accuracy %s"%(acc_project))
     
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    main()
     #ap = argparse.ArgumentParser()
     #ap.add_argument('--no-cuda', action='store_true', default=False, help='enables CUDA training')
     #ap.add_argument("-t", "--test", required=True, help="path to test file")
