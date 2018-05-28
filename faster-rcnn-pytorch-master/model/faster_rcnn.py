@@ -56,10 +56,7 @@ class _Faster_RCNN_Maker(nn.Module):
         # rpn loss
         delta, score, anchor = self.rpn.forward(features, new_image_size)
 
-        if gt_bbox.shape[0] == 0:
-            rpn_loss = 0
-        else:
-            rpn_loss = self.rpn.loss(delta, score, anchor, gt_bbox, new_image_size)
+        rpn_loss = self.rpn.loss(delta, score, anchor, gt_bbox, new_image_size)
 
         #=====!!!!!
         # print("rpn delta mean:", delta.data.cpu().numpy().mean())
