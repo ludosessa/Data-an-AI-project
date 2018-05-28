@@ -48,7 +48,10 @@ class AnchorTargetCreator(object):
             (anchor[:, 3] <= img_W))[0]
 
         anchor = anchor[index_inside_image] # rule out anchors that are not fully included inside the image
-
+        
+        if gt_bbox.shape[0]==0:
+            return np.zeros(shape = (anchor.shape[0],4)), np.zeros(shape = (anchor.shape[0],))
+        
         bbox_index_for_anchor, anchor_label = self._assign_targer_and_label_for_anchor(anchor, gt_bbox)
 
         # create targer delta for bbox regression
